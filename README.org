@@ -1,0 +1,38 @@
+* Application Level Gateway for the "zappa" smart phone app for controlling Telia IP-TV.
+
+The ALG is supposed to sit on a box that has one interface on the
+network with the "telia smart gateway" and one interface with the
+network with the smartphone.
+
+The chances are that there will never be any other users of this than
+me, and this is evident from the code, error messages just contain the
+failing source code expression.
+
+Actually the code is a bit of an experiment on how much one can bend C
+with macros and stuff.
+
+* Usage
+
+#+BEGIN_EXAMPLE
+$ zappa-alg inside-ip outside-ip
+#+END_EXAMPLE
+
+E.g, if the system's ip on the network with the smart phone is
+10.1.0.1 and the ip on the telia "smart" network is 192.168.1.70 start
+it as follows:
+
+#+BEGIN_EXAMPLE
+$ zappa-alg 10.1.0.1 192.168.1.70
+#+END_EXAMPLE
+
+
+* A bit about the protocol
+
+The handset sends multicast messages to 239.16.16.195 udp/5555. The
+settop box(es) does a HTTP request back to the handset on same TCP
+port number that the handset used as source port for the multicast
+message.
+
+After some handshake (set top box requesting nickname and avatar and
+setting the channel list) the actual key presses are simple json
+objects like {"key": "12"}
