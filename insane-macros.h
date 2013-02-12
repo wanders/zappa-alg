@@ -73,7 +73,7 @@ _errexit (int r, const char *msg)
  *
  *
  * Examples:
- * 	bind (sock, INET_SOCKADDR (INADDR_ANY, 5555), INET_SOCKADDR_L);
+ * 	bind (sock, INET_SOCKADDR ({INADDR_ANY}, 5555), INET_SOCKADDR_L);
  *
  */
 
