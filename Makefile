@@ -6,7 +6,7 @@ all: zappa-alg
 CFLAGS=-std=gnu99 -Wall -Wextra 
 
 zappa-alg: zappa-alg.c insane-macros.h
-	$(CC) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 
 
