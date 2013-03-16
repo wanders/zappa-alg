@@ -181,6 +181,10 @@ handle_mc (int sock, int revents, struct client *_client)
 		errexit (listen (client->listen_fd, 1));
 
 	}
+	if (client->port != addr.sin_port) {
+		debug ("Client %s switched port (from %d to %d)\n", inet_ntoa (client->addr), client->port, addr.sin_port);
+		client->port = addr.sin_port;
+	}
 
 	errexit (sendto (client->mc_send_fd, buf, r, 0, INET_SOCKADDR (ip_mcaddr, 5555), INET_SOCKADDR_L));
 }
@@ -203,6 +207,8 @@ handle_tcpredir_listenfd (int sock, int revents, struct client *client)
 	debug ("Accepted TCP from %s:%d\n", inet_ntoa (addr.sin_addr), addr.sin_port);
 
 	errexit (client->connect_fd = socket (AF_INET, SOCK_STREAM, 0));
+
+	debug ("Connecting TCP to %s:%d\n", inet_ntoa (client->addr), client->port);
 
 	errexit (connect (client->connect_fd, INET_SOCKADDR (client->addr, client->port), INET_SOCKADDR_L));
 
