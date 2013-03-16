@@ -14,7 +14,7 @@ with macros and stuff.
 * Usage
 
 #+BEGIN_EXAMPLE
-$ zappa-alg inside-ip outside-ip
+$ zappa-alg outside-ip inside-ip2 [inside-ip2...]
 #+END_EXAMPLE
 
 E.g, if the system's ip on the network with the smart phone is
@@ -22,7 +22,7 @@ E.g, if the system's ip on the network with the smart phone is
 it as follows:
 
 #+BEGIN_EXAMPLE
-$ zappa-alg 10.1.0.1 192.168.1.70
+$ zappa-alg 192.168.1.70 10.1.0.1
 #+END_EXAMPLE
 
 

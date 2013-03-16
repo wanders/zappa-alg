@@ -67,7 +67,6 @@ struct fddata {
 static struct client clients[MAX_CLIENTS];
 
 static struct in_addr ip_outside;
-static struct in_addr ip_inside;
 static struct in_addr ip_mcaddr;
 
 static void
@@ -259,13 +258,12 @@ disconnect:
 int main(int argc, char **argv) {
 	int sock;
 
-	if (argc != 3) {
-		fprintf (stderr, "Usage: zappa-alg inside-ip outside-ip\n");
+	if (argc < 3) {
+		fprintf (stderr, "Usage: zappa-alg outside-ip inside-ip1 [inside-ip2 ...]\n");
 		exit (1);
 	}
 
-	errexit (inet_aton (argv[1], &ip_inside));
-	errexit (inet_aton (argv[2], &ip_outside));
+	errexit (inet_aton (argv[1], &ip_outside));
 	errexit (inet_aton ("239.16.16.195", &ip_mcaddr));
 
 
@@ -276,11 +274,12 @@ int main(int argc, char **argv) {
 
 	errexit (bind (sock, INET_SOCKADDR ({INADDR_ANY}, 5555), INET_SOCKADDR_L));
 
-	struct ip_mreqn mr = {.imr_ifindex = 0,
-	                      .imr_multiaddr = ip_mcaddr,
-	                      .imr_address = ip_inside};
-	errexit (setsockopt (sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mr, sizeof (mr)));
-
+	for (int i = 2; i < argc; i++) {
+		struct ip_mreqn mr = {.imr_ifindex = 0,
+		                      .imr_multiaddr = ip_mcaddr};
+		errexit (inet_aton (argv[i], &mr.imr_address));
+		errexit (setsockopt (sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mr, sizeof (mr)));
+	}
 
 	for (;;) {
 		struct pollfd fds[MAX_FDS];
