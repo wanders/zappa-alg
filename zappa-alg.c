@@ -33,6 +33,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <syslog.h>
 #include <poll.h>
 #include <stdarg.h>
 #include <assert.h>
@@ -262,6 +263,8 @@ int main(int argc, char **argv) {
 		fprintf (stderr, "Usage: zappa-alg outside-ip inside-ip1 [inside-ip2 ...]\n");
 		exit (1);
 	}
+
+	openlog ("zappa-alg", LOG_NDELAY, LOG_DAEMON);
 
 	errexit (inet_aton (argv[1], &ip_outside));
 	errexit (inet_aton ("239.16.16.195", &ip_mcaddr));

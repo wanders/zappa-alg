@@ -62,6 +62,7 @@ _errexit (int r, const char *msg)
 		return;
 
 	perror (msg);
+	syslog (LOG_CRIT, "Shutting down due to error. %s: %m", msg);
 	exit (1);
 }
 
